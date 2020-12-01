@@ -10,7 +10,7 @@ using BepInEx;
 
 namespace BepVecterModCore
 {
-    [BepInPlugin("vecterModCore", "VecterModCore", "1.0.3")]
+    [BepInPlugin("vecterModCore", "VecterModCore", "1.0.5")]
     [BepInProcess("Vecter.exe")]
     public class VecterModCore : BaseUnityPlugin
     {
@@ -57,6 +57,7 @@ namespace BepVecterModCore
                 OptionsMenu2 menu;
                 FieldInfo field_options = typeof(OptionsMenu2).GetField("options", BindingFlags.NonPublic | BindingFlags.Instance);
                 List<string> options;
+                menu = Resources.FindObjectsOfTypeAll<OptionsMenu2>().First();
                 options = field_options.GetValue(menu) as List<string>;
 
 
@@ -66,9 +67,8 @@ namespace BepVecterModCore
                 options.AddRange(ModSettings);
 
                 HasAddedUI = true;
-                menu = Resources.FindObjectsOfTypeAll<OptionsMenu2>().First();
+                
             }
         }
     }
 }
-

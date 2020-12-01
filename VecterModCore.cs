@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +31,19 @@ namespace BepVecterModCore
         }
         void Update()
         {
+            OptionsMenu2 menu;
+            menu = Resources.FindObjectsOfTypeAll<OptionsMenu2>().First();
             ChangeMenuUI();
+
+            if (menu.SelectedOption == "ModCore" && go.GeneralGameState.isOptionsMenuShowing)
+            {
+                menu.SelectedOption += "\n\nThanks for getting ModCore! Now other mods can piggyback off of\nthis one :)). \n\n'enter' to go to the modding discord :)\n[ Go To Discord ]".ToLowerInvariant();
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    Application.OpenURL("https://discord.gg/dskKGWbF5P");
+                    
+                }
+            }
         }
 
 
@@ -39,44 +51,24 @@ namespace BepVecterModCore
         public static void ChangeMenuUI()
         {
 
-            if (go.GeneralGameState.isOptionsMenuShowing)
+            if (go.GeneralGameState.isOptionsMenuShowing && !HasAddedUI)
             {
 
                 OptionsMenu2 menu;
+                FieldInfo field_options = typeof(OptionsMenu2).GetField("options", BindingFlags.NonPublic | BindingFlags.Instance);
+                List<string> options;
+                options = field_options.GetValue(menu) as List<string>;
 
+
+                //MenuOptions
+                modSection = "------- Mods -------";
+                options.Add(modSection);
+                options.AddRange(ModSettings);
+
+                HasAddedUI = true;
                 menu = Resources.FindObjectsOfTypeAll<OptionsMenu2>().First();
-                if (HasAddedUI == false)
-                {
-                    FieldInfo field_options = typeof(OptionsMenu2).GetField("options", BindingFlags.NonPublic | BindingFlags.Instance);
-                    List<string> options;
-                    options = field_options.GetValue(menu) as List<string>;
-
-
-                    //MenuOptions
-                    modSection = "------- Mods -------";
-
-                    options.Add(modSection);
-                    options.AddRange(ModSettings);
-
-                    HasAddedUI = true;
-
-                }
-
-                switch (menu.SelectedOption)
-                {
-                    case "ModCore":
-                        menu.SelectedOption += "\n\nThanks for getting ModCore! Now other mods can piggyback off of\nthis one :)). \n\n'enter' to go to the modding discord :)\n[ Go To Discord ]".ToLowerInvariant();
-                        if (Input.GetKeyDown(KeyCode.Return))
-                        {
-                            Application.OpenURL("https://discord.gg/HbntSZn");
-                            Application.Quit();
-                        }
-                        break;
-
-
-                }
-
             }
         }
     }
 }
+

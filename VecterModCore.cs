@@ -1,9 +1,6 @@
-using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity;
 using System.Reflection;
 using UnityEngine;
 using BepInEx;
@@ -21,10 +18,13 @@ namespace BepVecterModCore
         public ColourScheme scheme;
         public MusicPlayer player;
         public static List<string> ModSettings = new List<string>();
+        public int numOfMods;
 
 
         void Start()
         {
+            numOfMods = Directory.GetFiles(Directory.GetCurrentDirectory()).Length - 1;
+            
             Debug.Log("I'm working with bep");
             HasAddedUI = false;
             ModSettings.Add("- ModCore");
@@ -37,7 +37,8 @@ namespace BepVecterModCore
 
             if (menu.SelectedOption == "ModCore" && go.GeneralGameState.isOptionsMenuShowing)
             {
-                menu.SelectedOption += "\n\nThanks for getting ModCore! Now other mods can piggyback off of\nthis one :)). \n\n'enter' to go to the modding discord :)\n[ Go To Discord ]".ToLowerInvariant();
+                menu.SelectedOption += "\n\nThanks for getting ModCore! Now other mods can piggyback off of\nthis one :)). \n\n'enter' to go to the modding discord :)\n[ Go To Discord ]" + "\n\n" +
+                                       "you have " + numOfMods + " Mods loaded! (may not be exact)";
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     Application.OpenURL("https://discord.gg/dskKGWbF5P");
